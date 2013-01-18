@@ -6,7 +6,7 @@
 #   [*ensure*]               - Enables or disables the specified location (present|absent)
 #   [*vhost*]                - Defines the default vHost for this location entry to include with
 #   [*location*]             - Specifies the URI associated with this location entry
-#   [*www_root*]             - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy
+#   [*www_root*]             - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy or $fastcgi
 #   [*index_files*]          - Default index files for NGINX to read when traversing a directory
 #   [*fastcgi*]              - location of fastcgi (host:port)
 #   [*fastcgi_params*]       - optional alternative fastcgi_params file to use
@@ -15,7 +15,7 @@
 #                              with nginx::resource::upstream
 #   [*proxy_read_timeout*]   - Override the default the proxy read timeout value of 90 seconds
 #   [*ssl*]                  - Indicates whether to setup SSL bindings for this location.
-#   [*ssl_only*]	     - Required if the SSL and normal vHost have the same port.
+#   [*ssl_only*]	           - Required if the SSL and normal vHost have the same port.
 #   [*location_alias*]       - Path to be used as basis for serving requests for this location
 #   [*stub_status*]          - If true it will point configure module stub_status to provide nginx stats on location
 #   [*location_cfg_prepend*] - It expects a hash with custom directives to put before anything else inside location
