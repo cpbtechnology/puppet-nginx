@@ -44,12 +44,12 @@ class nginx (
   }
 
   class { 'nginx::config':
-    worker_processes 	=> $worker_processes,
+    worker_processes 	  => $worker_processes,
     worker_connections 	=> $worker_connections,
-    proxy_set_header 	=> $proxy_set_header,
+    proxy_set_header 	  => $proxy_set_header,
     confd_purge         => $confd_purge,
-    require 		=> Class['nginx::package'],
-    notify  		=> Class['nginx::service'],
+    require 		        => Class['nginx::package'],
+    notify  		        => Class['nginx::service'],
   }
 
   class { 'nginx::service': 
