@@ -14,6 +14,9 @@
 #   [*ipv6_listen_options*] - Extra options for listen directive like 'default' to catchall. Template will allways add ipv6only=on.
 #                             While issue jfryman/puppet-nginx#30 is discussed, default value is 'default'.
 #   [*index_files*]         - Default index files for NGINX to read when traversing a directory
+#   [*fastcgi*]             - location of fastcgi (host:port)
+#   [*fastcgi_params*]      - optional alternative fastcgi_params file to use
+#   [*fastcgi_script*]      - optional SCRIPT_FILE parameter
 #   [*proxy*]               - Proxy server(s) for the root location to connect to.  Accepts a single value, can be used in
 #                             conjunction with nginx::resource::upstream
 #   [*proxy_read_timeout*]  - Override the default the proxy read timeout value of 90 seconds
@@ -51,7 +54,10 @@ define nginx::resource::vhost(
   $ssl                    = false,
   $ssl_cert               = undef,
   $ssl_key                = undef,
-  $ssl_port		  = '443',
+  $ssl_port         		  = '443',
+  $fastcgi                = undef,
+  $fastcgi_params         = '/etc/nginx/fastcgi_params',
+  $fastcgi_script         = undef,
   $proxy                  = undef,
   $proxy_read_timeout     = $nginx::params::nx_proxy_read_timeout,
   $index_files            = ['index.html', 'index.htm', 'index.php'],
@@ -106,6 +112,9 @@ define nginx::resource::vhost(
     ssl                  => $ssl,
     ssl_only             => $ssl_only,
     location             => '/',
+    fastcgi              => $fastcgi,
+    fastcgi_params       => $fastcgi_params,
+    fastcgi_script       => $fastcgi_script,
     proxy                => $proxy,
     proxy_read_timeout   => $proxy_read_timeout,
     try_files            => $try_files,

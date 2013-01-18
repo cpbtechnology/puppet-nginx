@@ -8,6 +8,9 @@
 #   [*location*]             - Specifies the URI associated with this location entry
 #   [*www_root*]             - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy
 #   [*index_files*]          - Default index files for NGINX to read when traversing a directory
+#   [*fastcgi*]              - location of fastcgi (host:port)
+#   [*fastcgi_params*]       - optional alternative fastcgi_params file to use
+#   [*fastcgi_script*]       - optional SCRIPT_FILE parameter
 #   [*proxy*]                - Proxy server(s) for a location to connect to. Accepts a single value, can be used in conjunction
 #                              with nginx::resource::upstream
 #   [*proxy_read_timeout*]   - Override the default the proxy read timeout value of 90 seconds
@@ -52,6 +55,9 @@ define nginx::resource::location(
   $vhost                = undef,
   $www_root             = undef,
   $index_files          = ['index.html', 'index.htm', 'index.php'],
+  $fastcgi              = undef,
+  $fastcgi_params       = '/etc/nginx/fastcgi_params',
+  $fastcgi_script       = undef,
   $proxy                = undef,
   $proxy_read_timeout   = $nginx::params::nx_proxy_read_timeout,
   $ssl                  = false,
@@ -80,6 +86,8 @@ define nginx::resource::location(
   # Use proxy template if $proxy is defined, otherwise use directory template.
   if ($proxy != undef) {
     $content_real = template('nginx/vhost/vhost_location_proxy.erb')
+  } elsif ($fastcig != undef) {
+    $content_real = template('nginx/vhost/vhost_location_fastcgi.erb')
   } elsif ($location_alias != undef) {
     $content_real = template('nginx/vhost/vhost_location_alias.erb')
   } elsif ($stub_status != undef) {
@@ -92,8 +100,8 @@ define nginx::resource::location(
   if ($vhost == undef) {
     fail('Cannot create a location reference without attaching to a virtual host')
   }
-  if (($www_root == undef) and ($proxy == undef) and ($location_alias == undef) and ($stub_status == undef) ) {
-    fail('Cannot create a location reference without a www_root, proxy, location_alias or stub_status defined')
+  if (($www_root == undef) and ($proxy == undef) and ($fastcgi == undef) and ($location_alias == undef) and ($stub_status == undef) ) {
+    fail('Cannot create a location reference without a www_root, proxy, fastcgi, location_alias or stub_status defined')
   }
   if (($www_root != undef) and ($proxy != undef)) {
     fail('Cannot define both directory and proxy in a virtual host')
