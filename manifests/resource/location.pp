@@ -6,7 +6,7 @@
 #   [*ensure*]               - Enables or disables the specified location (present|absent)
 #   [*vhost*]                - Defines the default vHost for this location entry to include with
 #   [*location*]             - Specifies the URI associated with this location entry
-#   [*www_root*]             - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy or $fastcgi
+#   [*www_root*]             - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy
 #   [*index_files*]          - Default index files for NGINX to read when traversing a directory
 #   [*fastcgi*]              - location of fastcgi (host:port)
 #   [*fastcgi_params*]       - optional alternative fastcgi_params file to use
@@ -19,7 +19,7 @@
 #   [*location_alias*]       - Path to be used as basis for serving requests for this location
 #   [*stub_status*]          - If true it will point configure module stub_status to provide nginx stats on location
 #   [*location_cfg_prepend*] - It expects a hash with custom directives to put before anything else inside location
-#   [*location_cfg_append*]  - It expects a hash with custom directives to put after everything else inside location   
+#   [*location_cfg_append*]  - It expects a hash with custom directives to put after everything else inside location
 #   [*try_files*]            - An array of file locations to try
 #   [*option*]               - Reserved for future use
 #
@@ -34,7 +34,7 @@
 #    location => '/bob',
 #    vhost    => 'test2.local',
 #  }
-#  
+#
 #  Custom config example to limit location on localhost,
 #  create a hash with any extra custom config you want.
 #  $my_config = {
