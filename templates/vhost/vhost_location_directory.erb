@@ -3,7 +3,7 @@
     <%= key %> <%= value %>;
 <% end -%><% end -%>
     root  <%= www_root %>;
-    <% if try_files then %>
+    <% unless try_files == :undef %>
     try_files <% try_files.each do |try| -%> <%= try %> <% end -%>;
     <% end %>
     index <% index_files.each do |i| %> <%= i %> <% end %>;
