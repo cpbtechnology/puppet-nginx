@@ -1,4 +1,7 @@
 location <%= location %> {
+  <% if @location_cfg_prepend -%><% location_cfg_prepend.each do |key,value| -%>
+  <%= key %> <%= value %>;
+  <% end -%><% end -%>
   <% unless www_root == :undef %>
   root <%= www_root %>;
   <% end %>
@@ -10,4 +13,7 @@ location <%= location %> {
   <% unless fastcgi_script == :undef %>
   fastcgi_param SCRIPT_FILENAME <%= fastcgi_script %>;
   <% end %>
+  <% if @location_cfg_append -%><% location_cfg_append.each do |key,value| -%>
+  <%= key %> <%= value %>;
+  <% end -%><% end -%>
 }
