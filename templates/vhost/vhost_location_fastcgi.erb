@@ -2,7 +2,11 @@ location <%= location %> {
   <% unless www_root == :undef %>
   root <%= www_root %>;
   <% end %>
+  <% if try_files != :undef or try_files != nil %>
+  try_files <%= try_files %>;
+  <% elsif try_files == :undef %>
   try_files $uri =404;
+  <% end %>
   include <%= fastcgi_params %>;
   fastcgi_pass <%= fastcgi %>;
   <% unless fastcgi_script == :undef %>
