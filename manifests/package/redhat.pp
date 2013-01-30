@@ -13,7 +13,9 @@
 # Sample Usage:
 #
 # This class file is not called directly
-class nginx::package::redhat {
+class nginx::package::redhat (
+  $version = present
+){
   $redhat_packages = ['nginx', 'GeoIP', 'gd', 'libXpm', 'libxslt']
 
   if downcase($::operatingsystem) == "redhat" {
@@ -33,6 +35,11 @@ class nginx::package::redhat {
     descr    => 'nginx repo',
     enabled  => '1',
     gpgcheck => '0',
+  }
+
+  package { 'nginx':
+    ensure  => $version,
+    require => Yumrepo['nginx-release']
   }
 
   package { $redhat_packages:

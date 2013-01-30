@@ -8,15 +8,18 @@
 #   [*location*]             - Specifies the URI associated with this location entry
 #   [*www_root*]             - Specifies the location on disk for files to be read from. Cannot be set in conjunction with $proxy
 #   [*index_files*]          - Default index files for NGINX to read when traversing a directory
+#   [*fastcgi*]              - location of fastcgi (host:port)
+#   [*fastcgi_params*]       - optional alternative fastcgi_params file to use
+#   [*fastcgi_script*]       - optional SCRIPT_FILE parameter
 #   [*proxy*]                - Proxy server(s) for a location to connect to. Accepts a single value, can be used in conjunction
 #                              with nginx::resource::upstream
 #   [*proxy_read_timeout*]   - Override the default the proxy read timeout value of 90 seconds
 #   [*ssl*]                  - Indicates whether to setup SSL bindings for this location.
-#   [*ssl_only*]	     - Required if the SSL and normal vHost have the same port.
+#   [*ssl_only*]	           - Required if the SSL and normal vHost have the same port.
 #   [*location_alias*]       - Path to be used as basis for serving requests for this location
 #   [*stub_status*]          - If true it will point configure module stub_status to provide nginx stats on location
 #   [*location_cfg_prepend*] - It expects a hash with custom directives to put before anything else inside location
-#   [*location_cfg_append*]  - It expects a hash with custom directives to put after everything else inside location   
+#   [*location_cfg_append*]  - It expects a hash with custom directives to put after everything else inside location
 #   [*try_files*]            - An array of file locations to try
 #   [*option*]               - Reserved for future use
 #
@@ -31,7 +34,7 @@
 #    location => '/bob',
 #    vhost    => 'test2.local',
 #  }
-#  
+#
 #  Custom config example to limit location on localhost,
 #  create a hash with any extra custom config you want.
 #  $my_config = {
@@ -52,6 +55,9 @@ define nginx::resource::location(
   $vhost                = undef,
   $www_root             = undef,
   $index_files          = ['index.html', 'index.htm', 'index.php'],
+  $fastcgi              = undef,
+  $fastcgi_params       = '/etc/nginx/fastcgi_params',
+  $fastcgi_script       = undef,
   $proxy                = undef,
   $proxy_read_timeout   = $nginx::params::nx_proxy_read_timeout,
   $ssl                  = false,
@@ -80,6 +86,8 @@ define nginx::resource::location(
   # Use proxy template if $proxy is defined, otherwise use directory template.
   if ($proxy != undef) {
     $content_real = template('nginx/vhost/vhost_location_proxy.erb')
+  } elsif ($fastcgi != undef) {
+    $content_real = template('nginx/vhost/vhost_location_fastcgi.erb')
   } elsif ($location_alias != undef) {
     $content_real = template('nginx/vhost/vhost_location_alias.erb')
   } elsif ($stub_status != undef) {
@@ -92,8 +100,8 @@ define nginx::resource::location(
   if ($vhost == undef) {
     fail('Cannot create a location reference without attaching to a virtual host')
   }
-  if (($www_root == undef) and ($proxy == undef) and ($location_alias == undef) and ($stub_status == undef) ) {
-    fail('Cannot create a location reference without a www_root, proxy, location_alias or stub_status defined')
+  if (($www_root == undef) and ($proxy == undef) and ($fastcgi == undef) and ($location_alias == undef) and ($stub_status == undef) ) {
+    fail('Cannot create a location reference without a www_root, proxy, fastcgi, location_alias or stub_status defined')
   }
   if (($www_root != undef) and ($proxy != undef)) {
     fail('Cannot define both directory and proxy in a virtual host')
