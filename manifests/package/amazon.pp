@@ -13,8 +13,10 @@
 # Sample Usage:
 #
 # This class file is not called directly
-class nginx::package::amazon {
+class nginx::package::amazon (
+  $version = 'present'
+){
   package { 'nginx':
-    ensure => present,
+    ensure => $version,
   }
 }
