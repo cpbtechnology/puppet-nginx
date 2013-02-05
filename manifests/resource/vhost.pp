@@ -75,6 +75,12 @@ define nginx::resource::vhost(
     mode  => '0644',
   }
 
+  # Strip out the www from the server name if rewriting www to non-www
+  if (rewrite_www_to_non_www) {
+    server_name.each_index do |i|
+      server_name[i] = server_name[i].gsub(/^www\./, '')
+  }
+
   # Add IPv6 Logic Check - Nginx service will not start if ipv6 is enabled
   # and support does not exist for it in the kernel.
   if ($ipv6_enable == 'true') and ($ipaddress6)  {
@@ -100,7 +106,7 @@ define nginx::resource::vhost(
       notify => Class['nginx::service'],
     }
   }
-  
+
   if ($ssl == 'true') and ($ssl_port == $listen_port) {
     $ssl_only = 'true'
   }
