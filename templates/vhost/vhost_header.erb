@@ -7,3 +7,6 @@ server {
   server_name           <%= server_name.join(" ") %>;
   access_log            <%= scope.lookupvar('nginx::params::nx_logdir')%>/<%= name %>.access.log;
   root                  <%= www_root %>;
+  <% if @vhost_cfg_prepend -%><% vhost_cfg_prepend.each do |key,value| -%>
+    <%= key %> <%= value %>;
+  <% end -%><% end -%>

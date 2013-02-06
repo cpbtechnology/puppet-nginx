@@ -29,6 +29,8 @@
 #   [*rewrite_www_to_non_www*]  - Adds a server directive and rewrite rule to rewrite www.domain.com to domain.com in order to avoid
 #                                 duplicate content (SEO);
 #   [*try_files*]               - Specifies the locations for files to be checked as an array. Cannot be used in conjuction with $proxy or $fastcgi.
+#   [*vhost_cfg_prepend*] - It expects a hash with custom directives to put before anything else inside location
+#   [*vhost_cfg_append*]  - It expects a hash with custom directives to put after everything else inside location
 #
 # Actions:
 #
@@ -66,6 +68,8 @@ define nginx::resource::vhost(
   $rewrite_www_to_non_www = false,
   $location_cfg_prepend   = undef,
   $location_cfg_append    = undef,
+  $vhost_cfg_prepend      = undef,
+  $vhost_cfg_append       = undef,
   $try_files              = undef
 ) {
 
